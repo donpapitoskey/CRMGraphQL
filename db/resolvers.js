@@ -1,4 +1,5 @@
 const Usuario = require('../models/User');
+const bcryptjs = require('bcryptjs');
 //resolvers
 
 const resolvers = {
@@ -6,7 +7,7 @@ const resolvers = {
         obtenerCurso: () => "algo"
     },
     Mutation: {
-        nuevoUsuario: async (_, {input},ctx) => {
+        nuevoUsuario: async (_, {input}) => {
             
             const { email, password} = input;
 
@@ -18,7 +19,8 @@ const resolvers = {
             }
 
             //Hashear password
-
+            const salt = await bcryptjs.genSalt(10);
+            input.password = await bcryptjs.hash(password,salt);
             //Guardar en DB
 
             try {
