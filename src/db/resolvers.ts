@@ -1,5 +1,5 @@
 import Usuario, {User} from '../models/User';
-import Producto from '../models/Product'
+import Producto, {Product} from '../models/Product'
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import config from '../config/config';
@@ -45,9 +45,7 @@ const resolvers = {
             if(!producto) {
                 throw new Error('Producto no encontrado');
             }
-
             return producto;
-
         }
     },
     Mutation: {
@@ -97,7 +95,7 @@ const resolvers = {
             }
 
         },
-        nuevoProducto: async (_:any,{input}:{input:User}) => {
+        nuevoProducto: async (_:any,{input}:{input:Product}) => {
             try {
                 const producto = new Producto(input);
 
@@ -110,6 +108,18 @@ const resolvers = {
                 throw new Error(error);
             }
 
+        },
+        actualizarProducto: async (_:any,{id,input}:{id:number,input:Product}) => {
+            // check existence
+            let producto = await Producto.findById(id);
+
+            if(!producto) {
+                throw new Error('Producto no encontrado');
+            }
+            //store in DB
+            producto = await Producto.findOneAndUpdate({_id:id},input, {new:true});
+
+            return producto;
         }
     }
 }

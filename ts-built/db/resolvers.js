@@ -189,6 +189,27 @@ var resolvers = {
                     }
                 });
             });
+        },
+        actualizarProducto: function (_, _a) {
+            var id = _a.id, input = _a.input;
+            return __awaiter(void 0, void 0, void 0, function () {
+                var producto;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0: return [4 /*yield*/, Product_1.default.findById(id)];
+                        case 1:
+                            producto = _b.sent();
+                            if (!producto) {
+                                throw new Error('Producto no encontrado');
+                            }
+                            return [4 /*yield*/, Product_1.default.findOneAndUpdate({ _id: id }, input, { new: true })];
+                        case 2:
+                            //store in DB
+                            producto = _b.sent();
+                            return [2 /*return*/, producto];
+                    }
+                });
+            });
         }
     }
 };
