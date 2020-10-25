@@ -210,6 +210,26 @@ var resolvers = {
                     }
                 });
             });
+        },
+        eliminarProducto: function (_, _a) {
+            var id = _a.id;
+            return __awaiter(void 0, void 0, void 0, function () {
+                var producto;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0: return [4 /*yield*/, Product_1.default.findById(id)];
+                        case 1:
+                            producto = _b.sent();
+                            if (!producto) {
+                                throw new Error('Producto no encontrado');
+                            }
+                            return [4 /*yield*/, Product_1.default.findOneAndDelete({ _id: id })];
+                        case 2:
+                            _b.sent();
+                            return [2 /*return*/, "Producto Eliminado"];
+                    }
+                });
+            });
         }
     }
 };
