@@ -1,13 +1,20 @@
-const Usuario = require('../models/User');
-const Producto = require('../models/Product');
-const bcryptjs = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-require('dotenv').config({path: 'variables.env'});
+import Usuario, {User} from '../models/User';
+import Producto from '../models/Product'
+import bcryptjs from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import config from '../config/config';
+//require('dotenv').config({path: 'variables.env'});
+
+interface Token {
+    usuario: User;
+    secreta: string;
+    expiresIn: string;
+}
 
 
-const crearToken = (usuario, secreta, expiresIn) => {
+const crearToken = ({usuario, secreta, expiresIn}:Token):string => {
     console.log(usuario);
-    const {id, email, nombre, apellido} = usuario;
+    const {id} = usuario;
 
     return jwt.sign({id}, secreta, {expiresIn})
 
@@ -17,14 +24,15 @@ const crearToken = (usuario, secreta, expiresIn) => {
 
 const resolvers = {
     Query: {
-        obtenerUsuario: async (_, {token}) => {
-            const usuarioId = await jwt.verify(token, process.env.SECRETA)
+        obtenerUsuario: async (_:any, {token}:{token:string} ) => {
+            //const usuarioId = await jwt.verify(token, process.env.SECRETA)
+            const usuarioId = await jwt.verify(token, config.jwtSecret)
 
             return usuarioId
         }
     },
     Mutation: {
-        nuevoUsuario: async (_, {input}) => {
+        nuevoUsuario: async (_:any, {input}:{input:User}) => {
             
             const { email, password} = input;
 
@@ -48,12 +56,12 @@ const resolvers = {
                 console.log(error);
             }
         },
-        autenticarUsuario: async (_, {input}) => {
+        autenticarUsuario: async (_:any, {input}:{input:User}) => {
 
             console.log(input);
             const { email, password } = input;
             //usuario existe
-            const existeUsuario = await Usuario.findOne({email});
+            const existeUsuario: User | null = await Usuario.findOne({email});
             if(!existeUsuario){
                 throw new Error('El usuairo no existe');
             }
@@ -66,11 +74,11 @@ const resolvers = {
             //token creation
 
             return {
-                token: crearToken(existeUsuario, process.env.SECRETA, '24h')
+                token: crearToken({usuario:existeUsuario, secreta:config.jwtSecret,expiresIn:'24h'})
             }
 
         },
-        nuevoProducto: async (_,{input}) => {
+        nuevoProducto: async (_:any,{input}:{input:User}) => {
             try {
                 const producto = new Producto(input);
 
@@ -87,4 +95,5 @@ const resolvers = {
     }
 }
 
-module.exports = resolvers;
+export type resolversType = typeof resolvers;
+export default resolvers;
