@@ -66,6 +66,41 @@ var resolvers = {
                     }
                 });
             });
+        },
+        obtenerProductos: function () { return __awaiter(void 0, void 0, void 0, function () {
+            var productos, error_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, Product_1.default.find({})];
+                    case 1:
+                        productos = _a.sent();
+                        return [2 /*return*/, productos];
+                    case 2:
+                        error_1 = _a.sent();
+                        console.log(error_1);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); },
+        obtenerProducto: function (_, _a) {
+            var id = _a.id;
+            return __awaiter(void 0, void 0, void 0, function () {
+                var producto;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0: return [4 /*yield*/, Product_1.default.findById(id)];
+                        case 1:
+                            producto = _b.sent();
+                            if (!producto) {
+                                throw new Error('Producto no encontrado');
+                            }
+                            return [2 /*return*/, producto];
+                    }
+                });
+            });
         }
     },
     Mutation: {
@@ -137,7 +172,7 @@ var resolvers = {
         nuevoProducto: function (_, _a) {
             var input = _a.input;
             return __awaiter(void 0, void 0, void 0, function () {
-                var producto, resultado, error_1;
+                var producto, resultado, error_2;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
@@ -148,8 +183,8 @@ var resolvers = {
                             resultado = _b.sent();
                             return [2 /*return*/, resultado];
                         case 2:
-                            error_1 = _b.sent();
-                            throw new Error(error_1);
+                            error_2 = _b.sent();
+                            throw new Error(error_2);
                         case 3: return [2 /*return*/];
                     }
                 });

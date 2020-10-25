@@ -29,6 +29,25 @@ const resolvers = {
             const usuarioId = await jwt.verify(token, config.jwtSecret)
 
             return usuarioId
+        },
+        obtenerProductos: async () => {
+            try {
+                const productos = await Producto.find({});
+                return productos;
+            } catch (error){
+                console.log(error);
+            }
+        },
+        obtenerProducto: async (_:any,{id}:{id:number}) => {
+            //revisar producto existe
+            const producto = await Producto.findById(id);
+
+            if(!producto) {
+                throw new Error('Producto no encontrado');
+            }
+
+            return producto;
+
         }
     },
     Mutation: {
