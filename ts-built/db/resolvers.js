@@ -349,6 +349,33 @@ var resolvers = {
                     }
                 });
             });
+        },
+        eliminarCliente: function (_, _a, ctx) {
+            var id = _a.id;
+            return __awaiter(void 0, void 0, void 0, function () {
+                var cliente;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0: return [4 /*yield*/, Client_1.default.findById(id)];
+                        case 1:
+                            cliente = _b.sent();
+                            // Verify existence
+                            if (!cliente) {
+                                throw new Error("Ese cliente no existe");
+                            }
+                            //Verify vendor
+                            if (cliente.vendedor.toString() !== ctx.usuario.id) {
+                                throw new Error("No tienes las credenciales");
+                            }
+                            //Delete it
+                            return [4 /*yield*/, Client_1.default.findOneAndDelete({ _id: id })];
+                        case 2:
+                            //Delete it
+                            _b.sent();
+                            return [2 /*return*/, "Cliente eliminado"];
+                    }
+                });
+            });
         }
     }
 };
