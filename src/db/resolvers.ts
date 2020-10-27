@@ -185,20 +185,6 @@ const resolvers = {
             } catch (error) {
                 console.log(error);
             }
-        },
-        actualizarCliente: async (_:any,{id,input}:{id:string,input:Client}, ctx: any ) => {
-            //Verificar existe
-            let cliente = await Cliente.findById(id);
-
-            if(!cliente) {
-                throw new Error("Cliente no existe");
-            }
-            //Verificaf vendedor que edita
-            if (cliente.vendedor.toString() !== ctx.usuario.id ){
-                throw new Error("No tienes las credenciales");
-            }
-            //guardar cliente
-            cliente = await Cliente.findOneAndUpdate({_id:id}, input, {new:true});
         }
     }
 };
