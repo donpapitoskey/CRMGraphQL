@@ -139,7 +139,28 @@ var resolvers = {
                     case 3: return [2 /*return*/];
                 }
             });
-        }); }
+        }); },
+        obtenerCliente: function (_, _a, ctx) {
+            var id = _a.id;
+            return __awaiter(void 0, void 0, void 0, function () {
+                var cliente;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0: return [4 /*yield*/, Client_1.default.findById(id)];
+                        case 1:
+                            cliente = _b.sent();
+                            if (!cliente) {
+                                throw new Error("Cliente no encontrado");
+                            }
+                            //Quien lo creo
+                            if (cliente.vendedor.toString() !== ctx.usuario.id) {
+                                throw new Error("No tienes las credenciales");
+                            }
+                            return [2 /*return*/, cliente];
+                    }
+                });
+            });
+        }
     },
     Mutation: {
         nuevoUsuario: function (_, _a) {
