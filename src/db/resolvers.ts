@@ -11,13 +11,12 @@ interface Token {
     usuario: User;
     secreta: string;
     expiresIn: string;
-}
+};
 
 const crearToken = ({usuario, secreta, expiresIn}:Token):string => {
     console.log(`This is the info of the token: \n${usuario}`);
     const {_id, email, nombre, apellido} = usuario;
     return jwt.sign({id:_id, email, nombre, apellido},secreta, {expiresIn})
-
 };
 
 //resolvers
@@ -52,6 +51,14 @@ const resolvers = {
                 const clientes = await Cliente.find({});
                 return clientes;
             }catch (error) {
+                console.log(error);
+            }
+        },
+        obtenerClientesVendedor: async (_:any,{},ctx:any ) => {
+            try {
+                const clientes = await Cliente.find({vendedor: ctx.usuario.id.toString()});
+                return clientes;
+            } catch (error){
                 console.log(error);
             }
         }
@@ -165,9 +172,8 @@ const resolvers = {
                 console.log(error);
             }
         }
-
     }
-}
+};
 
 export type resolversType = typeof resolvers;
 export default resolvers;

@@ -45,6 +45,7 @@ var Client_1 = __importDefault(require("../models/Client"));
 var bcryptjs_1 = __importDefault(require("bcryptjs"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var config_1 = __importDefault(require("../config/config"));
+;
 var crearToken = function (_a) {
     var usuario = _a.usuario, secreta = _a.secreta, expiresIn = _a.expiresIn;
     console.log("This is the info of the token: \n" + usuario);
@@ -120,6 +121,24 @@ var resolvers = {
                     case 3: return [2 /*return*/];
                 }
             });
+        }); },
+        obtenerClientesVendedor: function (_, _a, ctx) { return __awaiter(void 0, void 0, void 0, function () {
+            var clientes, error_3;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, Client_1.default.find({ vendedor: ctx.usuario.id.toString() })];
+                    case 1:
+                        clientes = _b.sent();
+                        return [2 /*return*/, clientes];
+                    case 2:
+                        error_3 = _b.sent();
+                        console.log(error_3);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
         }); }
     },
     Mutation: {
@@ -191,7 +210,7 @@ var resolvers = {
         nuevoProducto: function (_, _a) {
             var input = _a.input;
             return __awaiter(void 0, void 0, void 0, function () {
-                var producto, resultado, error_3;
+                var producto, resultado, error_4;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
@@ -202,8 +221,8 @@ var resolvers = {
                             resultado = _b.sent();
                             return [2 /*return*/, resultado];
                         case 2:
-                            error_3 = _b.sent();
-                            throw new Error(error_3);
+                            error_4 = _b.sent();
+                            throw new Error(error_4);
                         case 3: return [2 /*return*/];
                     }
                 });
@@ -253,7 +272,7 @@ var resolvers = {
         nuevoCliente: function (_, _a, ctx) {
             var input = _a.input;
             return __awaiter(void 0, void 0, void 0, function () {
-                var email, cliente, nuevoCliente, result, error_4;
+                var email, cliente, nuevoCliente, result, error_5;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
@@ -277,8 +296,8 @@ var resolvers = {
                             result = _b.sent();
                             return [2 /*return*/, result];
                         case 4:
-                            error_4 = _b.sent();
-                            console.log(error_4);
+                            error_5 = _b.sent();
+                            console.log(error_5);
                             return [3 /*break*/, 5];
                         case 5: return [2 /*return*/];
                     }
