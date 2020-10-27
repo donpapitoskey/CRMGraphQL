@@ -179,12 +179,25 @@ const resolvers = {
             
             // store in DB
             try {
-            console.log(nuevoCliente);
             const result = await nuevoCliente.save();
             return result;
             } catch (error) {
                 console.log(error);
             }
+        },
+        actualizarCliente: async (_:any,{id,input}:{id:string,input:Client}, ctx:any) => {
+            let cliente = await Cliente.findById(id);
+            // Verify existence
+            if(!cliente){
+                throw new Error("Ese cliente no existe");
+            }
+            //Verify vendor
+            if (cliente.vendedor.toString() !== ctx.usuario.id ){
+                throw new Error("No tienes las credenciales");
+            }
+            //Store it
+            cliente = await Cliente.findOneAndUpdate({_id:id}, input, {new:true});
+            return cliente;
         }
     }
 };

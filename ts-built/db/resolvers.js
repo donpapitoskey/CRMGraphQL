@@ -311,7 +311,6 @@ var resolvers = {
                             _b.label = 2;
                         case 2:
                             _b.trys.push([2, 4, , 5]);
-                            console.log(nuevoCliente);
                             return [4 /*yield*/, nuevoCliente.save()];
                         case 3:
                             result = _b.sent();
@@ -321,6 +320,32 @@ var resolvers = {
                             console.log(error_5);
                             return [3 /*break*/, 5];
                         case 5: return [2 /*return*/];
+                    }
+                });
+            });
+        },
+        actualizarCliente: function (_, _a, ctx) {
+            var id = _a.id, input = _a.input;
+            return __awaiter(void 0, void 0, void 0, function () {
+                var cliente;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0: return [4 /*yield*/, Client_1.default.findById(id)];
+                        case 1:
+                            cliente = _b.sent();
+                            // Verify existence
+                            if (!cliente) {
+                                throw new Error("Ese cliente no existe");
+                            }
+                            //Verify vendor
+                            if (cliente.vendedor.toString() !== ctx.usuario.id) {
+                                throw new Error("No tienes las credenciales");
+                            }
+                            return [4 /*yield*/, Client_1.default.findOneAndUpdate({ _id: id }, input, { new: true })];
+                        case 2:
+                            //Store it
+                            cliente = _b.sent();
+                            return [2 /*return*/, cliente];
                     }
                 });
             });
