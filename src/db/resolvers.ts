@@ -1,8 +1,10 @@
 import Usuario, {User} from '../models/User';
 import Producto, {Product} from '../models/Product'
+import Cliente, {Client} from '../models/Client';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import config from '../config/config';
+import { UserInputError } from 'apollo-server';
 //require('dotenv').config({path: 'variables.env'});
 
 interface Token {
@@ -11,12 +13,10 @@ interface Token {
     expiresIn: string;
 }
 
-
 const crearToken = ({usuario, secreta, expiresIn}:Token):string => {
-    console.log(usuario);
-    const {id} = usuario;
-
-    return jwt.sign({id}, secreta, {expiresIn})
+    console.log(`This is the info of the token: \n${usuario}`);
+    const {_id, email, nombre, apellido} = usuario;
+    return jwt.sign({id:_id, email, nombre, apellido},secreta, {expiresIn})
 
 };
 
@@ -26,7 +26,7 @@ const resolvers = {
     Query: {
         obtenerUsuario: async (_:any, {token}:{token:string} ) => {
             //const usuarioId = await jwt.verify(token, process.env.SECRETA)
-            const usuarioId = await jwt.verify(token, config.jwtSecret)
+            const usuarioId = await jwt.verify(token, config.jwtSecret);
 
             return usuarioId
         },
@@ -74,7 +74,6 @@ const resolvers = {
             }
         },
         autenticarUsuario: async (_:any, {input}:{input:User}) => {
-
             console.log(input);
             const { email, password } = input;
             //usuario existe
@@ -91,7 +90,7 @@ const resolvers = {
             //token creation
 
             return {
-                token: crearToken({usuario:existeUsuario, secreta:config.jwtSecret,expiresIn:'24h'})
+                token: crearToken({usuario:existeUsuario, secreta:config.jwtSecret , expiresIn:'24h'})
             }
 
         },
@@ -129,6 +128,34 @@ const resolvers = {
             }
             await Producto.findOneAndDelete({_id:id});
             return "Producto Eliminado";
+        },
+        nuevoCliente: async (_:any, {input}:{input:Client}, ctx:any) => {
+            
+            console.log(input);
+            const {email} = input;
+
+            // Verify registered client
+            //console.log(input);
+            
+            const cliente = await Cliente.findOne({email});
+            
+            if(cliente) {
+                throw new Error('Ese cliente ya esta registrado');
+            }
+            const nuevoCliente = new Cliente(input);
+            
+            ///asign vendor
+            
+            nuevoCliente.vendedor = ctx.usuario.id
+            
+            // store in DB
+            try {
+            console.log(nuevoCliente);
+            const result = await nuevoCliente.save();
+            return result;
+            } catch (error) {
+                console.log(error);
+            }
         }
 
     }

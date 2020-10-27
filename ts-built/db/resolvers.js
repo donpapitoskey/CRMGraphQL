@@ -41,14 +41,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var User_1 = __importDefault(require("../models/User"));
 var Product_1 = __importDefault(require("../models/Product"));
+var Client_1 = __importDefault(require("../models/Client"));
 var bcryptjs_1 = __importDefault(require("bcryptjs"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var config_1 = __importDefault(require("../config/config"));
 var crearToken = function (_a) {
     var usuario = _a.usuario, secreta = _a.secreta, expiresIn = _a.expiresIn;
-    console.log(usuario);
-    var id = usuario.id;
-    return jsonwebtoken_1.default.sign({ id: id }, secreta, { expiresIn: expiresIn });
+    console.log("This is the info of the token: \n" + usuario);
+    var _id = usuario._id, email = usuario.email, nombre = usuario.nombre, apellido = usuario.apellido;
+    return jsonwebtoken_1.default.sign({ id: _id, email: email, nombre: nombre, apellido: apellido }, secreta, { expiresIn: expiresIn });
 };
 //resolvers
 var resolvers = {
@@ -227,6 +228,41 @@ var resolvers = {
                         case 2:
                             _b.sent();
                             return [2 /*return*/, "Producto Eliminado"];
+                    }
+                });
+            });
+        },
+        nuevoCliente: function (_, _a, ctx) {
+            var input = _a.input;
+            return __awaiter(void 0, void 0, void 0, function () {
+                var email, cliente, nuevoCliente, result, error_3;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            console.log(input);
+                            email = input.email;
+                            return [4 /*yield*/, Client_1.default.findOne({ email: email })];
+                        case 1:
+                            cliente = _b.sent();
+                            if (cliente) {
+                                throw new Error('Ese cliente ya esta registrado');
+                            }
+                            nuevoCliente = new Client_1.default(input);
+                            ///asign vendor
+                            nuevoCliente.vendedor = ctx.usuario.id;
+                            _b.label = 2;
+                        case 2:
+                            _b.trys.push([2, 4, , 5]);
+                            console.log(nuevoCliente);
+                            return [4 /*yield*/, nuevoCliente.save()];
+                        case 3:
+                            result = _b.sent();
+                            return [2 /*return*/, result];
+                        case 4:
+                            error_3 = _b.sent();
+                            console.log(error_3);
+                            return [3 /*break*/, 5];
+                        case 5: return [2 /*return*/];
                     }
                 });
             });

@@ -1,12 +1,9 @@
 import {ApolloServer} from 'apollo-server';
-//const {ApolloServer} = require('apollo-server');
 import typeDefs from './db/schema';
-//const  typeDefs = require('./db/schema');
 import resolvers from './db/resolvers';
-//const resolvers = require('./db/resolvers');
 import conectarDB from './config/db';
-//const conectarDB = require('./config/db');
-
+import jwt from 'jsonwebtoken';
+import config from './config/config';
 //conectar a la base de datos
 
 conectarDB();
@@ -15,6 +12,22 @@ conectarDB();
 const server = new ApolloServer({
     typeDefs,
     resolvers,
+    context: ({req}) => {
+      //console.log(req.headers["authorization"]);
+      const token = req.headers['authorization'] || '';
+      if(token) {
+        try {
+          const usuario = jwt.verify(token, config.jwtSecret)
+
+          //console.log(usuario);
+
+          return {usuario};
+        } catch (error) {
+          console.log('Hubo un error');
+          console.log(error);
+        }
+      }
+    }
 });
 
 //start server
