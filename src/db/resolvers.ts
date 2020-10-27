@@ -46,6 +46,14 @@ const resolvers = {
                 throw new Error('Producto no encontrado');
             }
             return producto;
+        },
+        obtenerClientes: async () => {
+            try {
+                const clientes = await Cliente.find({});
+                return clientes;
+            }catch (error) {
+                console.log(error);
+            }
         }
     },
     Mutation: {

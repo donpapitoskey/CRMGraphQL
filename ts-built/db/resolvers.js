@@ -102,7 +102,25 @@ var resolvers = {
                     }
                 });
             });
-        }
+        },
+        obtenerClientes: function () { return __awaiter(void 0, void 0, void 0, function () {
+            var clientes, error_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, Client_1.default.find({})];
+                    case 1:
+                        clientes = _a.sent();
+                        return [2 /*return*/, clientes];
+                    case 2:
+                        error_2 = _a.sent();
+                        console.log(error_2);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); }
     },
     Mutation: {
         nuevoUsuario: function (_, _a) {
@@ -173,7 +191,7 @@ var resolvers = {
         nuevoProducto: function (_, _a) {
             var input = _a.input;
             return __awaiter(void 0, void 0, void 0, function () {
-                var producto, resultado, error_2;
+                var producto, resultado, error_3;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
@@ -184,8 +202,8 @@ var resolvers = {
                             resultado = _b.sent();
                             return [2 /*return*/, resultado];
                         case 2:
-                            error_2 = _b.sent();
-                            throw new Error(error_2);
+                            error_3 = _b.sent();
+                            throw new Error(error_3);
                         case 3: return [2 /*return*/];
                     }
                 });
@@ -235,7 +253,7 @@ var resolvers = {
         nuevoCliente: function (_, _a, ctx) {
             var input = _a.input;
             return __awaiter(void 0, void 0, void 0, function () {
-                var email, cliente, nuevoCliente, result, error_3;
+                var email, cliente, nuevoCliente, result, error_4;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
@@ -259,8 +277,8 @@ var resolvers = {
                             result = _b.sent();
                             return [2 /*return*/, result];
                         case 4:
-                            error_3 = _b.sent();
-                            console.log(error_3);
+                            error_4 = _b.sent();
+                            console.log(error_4);
                             return [3 /*break*/, 5];
                         case 5: return [2 /*return*/];
                     }
