@@ -9,7 +9,7 @@ export interface User extends Document {
     id: string;
 }
 
-const UsuariosSchema: Schema = new Schema({
+const PedidosSchema: Schema = new Schema({
     nombre: {
         type: String,
         required: true,
@@ -42,5 +42,4 @@ const UsuariosSchema: Schema = new Schema({
 });
 
 
-
-export default model<User>('Usuario',UsuariosSchema);
+export default model<User>('Usuario',PedidosSchema);

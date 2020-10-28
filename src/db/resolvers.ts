@@ -1,6 +1,7 @@
 import Usuario, {User} from '../models/User';
 import Producto, {Product} from '../models/Product'
 import Cliente, {Client} from '../models/Client';
+import Pedido , { Lists  } from '../models/Pedido';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import config from '../config/config';
@@ -140,7 +141,7 @@ const resolvers = {
         actualizarProducto: async (_:any,{id,input}:{id:number,input:Product}) => {
             // check existence
             let producto = await Producto.findById(id);
-
+            
             if(!producto) {
                 throw new Error('Producto no encontrado');
             }
@@ -213,6 +214,43 @@ const resolvers = {
             
             await Cliente.findOneAndDelete({_id:id});
             return "Cliente eliminado";
+        },
+        nuevoPedido: async (_:any, {input}: {input:Lists}, ctx:any ) => {
+            
+            const {cliente} = input;
+
+            //Verificar cliente
+
+            let clienteExiste = await Cliente.findById(cliente);
+
+            if(!clienteExiste) {
+                throw new Error('Ese cliente no existe');
+            }
+            //Verificar si el cliente es del vendedor
+
+            if (clienteExiste.vendedor.toString() !== ctx.usuario.id){
+                throw new Error('No tienes las credenciales para ello');
+            }
+
+
+            //Revisar stock
+            for await (const item of input.pedido) {
+                const {id} = item;
+
+                let producto = await Producto.findById(id);
+
+                if(!producto){
+                    throw new Error("Producto no existe");
+                }
+                if(item.cantidad > producto.existencia){
+                    throw new Error(`El articulo ${producto.nombre} excede la cantidad disponible`);
+                }
+                console.log(producto);
+            }
+            console.log(input.pedido);
+            //asignar vendor
+
+            // Guardar en DB
         }
     }
 };

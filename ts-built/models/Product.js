@@ -20,6 +20,10 @@ var ProductosSchema = new mongoose_1.Schema({
     creado: {
         type: Date,
         default: Date.now()
+    },
+    id: {
+        type: String,
+        required: true
     }
 });
 exports.default = mongoose_1.model('Producto', ProductosSchema);

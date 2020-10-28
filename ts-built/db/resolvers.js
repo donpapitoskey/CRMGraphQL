@@ -35,6 +35,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __asyncValues = (this && this.__asyncValues) || function (o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -373,6 +380,71 @@ var resolvers = {
                             //Delete it
                             _b.sent();
                             return [2 /*return*/, "Cliente eliminado"];
+                    }
+                });
+            });
+        },
+        nuevoPedido: function (_, _a, ctx) {
+            var input = _a.input;
+            return __awaiter(void 0, void 0, void 0, function () {
+                var cliente, clienteExiste, _b, _c, item, id, producto, e_1_1;
+                var e_1, _d;
+                return __generator(this, function (_e) {
+                    switch (_e.label) {
+                        case 0:
+                            cliente = input.cliente;
+                            return [4 /*yield*/, Client_1.default.findById(cliente)];
+                        case 1:
+                            clienteExiste = _e.sent();
+                            if (!clienteExiste) {
+                                throw new Error('Ese cliente no existe');
+                            }
+                            //Verificar si el cliente es del vendedor
+                            if (clienteExiste.vendedor.toString() !== ctx.usuario.id) {
+                                throw new Error('No tienes las credenciales para ello');
+                            }
+                            _e.label = 2;
+                        case 2:
+                            _e.trys.push([2, 8, 9, 14]);
+                            _b = __asyncValues(input.pedido);
+                            _e.label = 3;
+                        case 3: return [4 /*yield*/, _b.next()];
+                        case 4:
+                            if (!(_c = _e.sent(), !_c.done)) return [3 /*break*/, 7];
+                            item = _c.value;
+                            id = item.id;
+                            return [4 /*yield*/, Product_1.default.findById(id)];
+                        case 5:
+                            producto = _e.sent();
+                            if (!producto) {
+                                throw new Error("Producto no existe");
+                            }
+                            if (item.cantidad > producto.existencia) {
+                                throw new Error("El articulo " + producto.nombre + " excede la cantidad disponible");
+                            }
+                            console.log(producto);
+                            _e.label = 6;
+                        case 6: return [3 /*break*/, 3];
+                        case 7: return [3 /*break*/, 14];
+                        case 8:
+                            e_1_1 = _e.sent();
+                            e_1 = { error: e_1_1 };
+                            return [3 /*break*/, 14];
+                        case 9:
+                            _e.trys.push([9, , 12, 13]);
+                            if (!(_c && !_c.done && (_d = _b.return))) return [3 /*break*/, 11];
+                            return [4 /*yield*/, _d.call(_b)];
+                        case 10:
+                            _e.sent();
+                            _e.label = 11;
+                        case 11: return [3 /*break*/, 13];
+                        case 12:
+                            if (e_1) throw e_1.error;
+                            return [7 /*endfinally*/];
+                        case 13: return [7 /*endfinally*/];
+                        case 14:
+                            console.log(input.pedido);
+                            return [2 /*return*/];
                     }
                 });
             });

@@ -1,4 +1,4 @@
-import {Schema, model} from 'mongoose';
+import {Schema, model, Document} from 'mongoose';
 
 
 export interface Product extends Document {
@@ -8,7 +8,6 @@ export interface Product extends Document {
     creado: Date;
     id: string;
 }
-
 
 const ProductosSchema = new  Schema({
     nombre: {
@@ -29,7 +28,11 @@ const ProductosSchema = new  Schema({
     creado: {
         type: Date,
         default: Date.now()
+    },
+    id: {
+        type: String,
+        required:true
     }
 });
 
-export default model('Producto',ProductosSchema);
+export default model<Product>('Producto',ProductosSchema);

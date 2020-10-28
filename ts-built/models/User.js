@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = require("mongoose");
-var UsuariosSchema = new mongoose_1.Schema({
+var PedidosSchema = new mongoose_1.Schema({
     nombre: {
         type: String,
         required: true,
@@ -32,5 +32,5 @@ var UsuariosSchema = new mongoose_1.Schema({
         unique: true,
     }
 });
-exports.default = mongoose_1.model('Usuario', UsuariosSchema);
+exports.default = mongoose_1.model('Usuario', PedidosSchema);
 //# sourceMappingURL=User.js.map
